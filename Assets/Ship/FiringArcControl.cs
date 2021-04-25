@@ -114,6 +114,8 @@ namespace Ship
                         direction = direction * 1.1F;
                     }
 
+                    direction = Vector2.ClampMagnitude(direction, MaxDistance);
+
                     var cannonBallGameObject = Instantiate(CannonBallPrefab, cannonPosition, Quaternion.identity);
                     var cannonBall = cannonBallGameObject.GetComponent<CannonBall>();
                     cannonBall.Distance = direction.magnitude;
