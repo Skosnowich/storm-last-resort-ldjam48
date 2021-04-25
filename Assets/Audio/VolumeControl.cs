@@ -19,6 +19,7 @@ namespace Audio
         public AudioMixer AudioMixer;
 
         private AudioSource _audioSource;
+        private bool _initialized;
 
         private void Start()
         {
@@ -27,6 +28,7 @@ namespace Audio
             InitSlider(SoundSlider, SoundVolumeName);
             _audioSource = GetComponent<AudioSource>();
             _audioSource.ignoreListenerPause = true;
+            _initialized = true;
         }
 
         private void InitSlider(Slider slider, string volumeParameterName)
@@ -39,19 +41,28 @@ namespace Audio
 
         public void OnMasterSliderVolumeChanged()
         {
-            OnSliderVolumeChanged(MasterSlider, MasterVolumeName);
-            PlayTestSound();
+            if (_initialized)
+            {
+                OnSliderVolumeChanged(MasterSlider, MasterVolumeName);
+                PlayTestSound();
+            }
         }
 
         public void OnMusicSliderVolumeChanged()
         {
-            OnSliderVolumeChanged(MusicSlider, MusicVolumeName);
+            if (_initialized)
+            {
+                OnSliderVolumeChanged(MusicSlider, MusicVolumeName);
+            }
         }
 
         public void OnSoundSliderVolumeChanged()
         {
-            OnSliderVolumeChanged(SoundSlider, SoundVolumeName);
-            PlayTestSound();
+            if (_initialized)
+            {
+                OnSliderVolumeChanged(SoundSlider, SoundVolumeName);
+                PlayTestSound();
+            }
         }
 
         private void PlayTestSound()
