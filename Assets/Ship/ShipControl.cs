@@ -1,4 +1,5 @@
 using System;
+using UI;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Ship
     [RequireComponent(typeof(Rigidbody2D))]
     public class ShipControl : MonoBehaviour
     {
+        public Team Team = Team.Enemy;
         public int SailsOpenMin = 0;
         public int SailsOpenMax = 3;
         public float SpeedUpTime = 1;
@@ -15,41 +17,35 @@ namespace Ship
         public float RudderPositionMax = 30;
         public float SteeringSpeed = 30;
         public float RudderDeadZone = 2.5F;
+        public float MaxHullHealth = 100;
+        public float MaxSailHealth = 100;
+        public float MaxCrewHealth = 50;
 
         private float _rudderPosition;
         private int _sailsOpen;
         private Rigidbody2D _rigidbody;
 
-        public float _currentVelocity;
+        private float _currentVelocity;
+        private Bars _bars;
+
+        private float _currentHullHealth;
+        private float _currentSailHealth;
+        private float _currentCrewHealth;
 
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
+            _bars = GetComponent<Bars>();
+
+            _currentHullHealth = MaxHullHealth;
+            _currentSailHealth = MaxSailHealth;
+            _currentCrewHealth = MaxCrewHealth;
         }
 
         private void Update()
         {
             if (GlobalGameState.IsUnpaused())
             {
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    OpenSail();
-                }
-
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    CloseSail();
-                }
-
-                if (Input.GetKey(KeyCode.A))
-                {
-                    SteerLeft();
-                }
-                else if (Input.GetKey(KeyCode.D))
-                {
-                    SteerRight();
-                }
-
                 if (_currentVelocity < _sailsOpen)
                 {
                     _currentVelocity = Mathf.Min(_currentVelocity + Time.deltaTime * SpeedUpTime * _sailsOpen, _sailsOpen);
@@ -61,11 +57,10 @@ namespace Ship
 
                 _rigidbody.velocity = transform.up * _currentVelocity;
 
-                var currentVelocity = _rigidbody.velocity.magnitude;
-                if (currentVelocity > 0.1f)
+                if (_currentVelocity > 0.1f)
                 {
-                    var rudderPositionWithAppliedDeadZone = Mathf.Abs(_rudderPosition) < RudderDeadZone ? 0 : _rudderPosition;
-                    _rigidbody.angularVelocity = -rudderPositionWithAppliedDeadZone / SailsOpenMax * currentVelocity;
+                    var rudderPositionWithAppliedDeadZone = RudderPosition();
+                    _rigidbody.angularVelocity = -rudderPositionWithAppliedDeadZone / SailsOpenMax * _currentVelocity;
                 }
                 else
                 {
@@ -74,36 +69,65 @@ namespace Ship
             }
         }
 
-        private void SteerRight()
+        public void ChangeHullHealth(float healthChange)
+        {
+            _currentHullHealth = Mathf.Clamp(_currentHullHealth + healthChange, 0, MaxHullHealth);
+            
+            var died = false;
+            if (Math.Abs(_currentHullHealth) < 0.01f)
+            {
+                died = true;
+                _currentHullHealth = 0;
+            }
+
+            _bars.HullBar.Value = _currentHullHealth / MaxHullHealth;
+
+            if (died)
+            {
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            Destroy(gameObject);
+        }
+
+        public void SteerRight()
         {
             if (ChangeRudderPosition(1))
             {
-                Debug.Log($"Steered right, now at {_rudderPosition}.");
+//                Debug.Log($"Steered right, now at {_rudderPosition}.");
             }
         }
 
-        private void SteerLeft()
+        public void SteerLeft()
         {
             if (ChangeRudderPosition(-1))
             {
-                Debug.Log($"Steered left, now at {_rudderPosition}.");
+//                Debug.Log($"Steered left, now at {_rudderPosition}.");
             }
         }
 
-        private void OpenSail()
+        public void OpenSail()
         {
             if (ChangeOpenSailCount(1))
             {
-                Debug.Log($"Opened a sail, now having {_sailsOpen} opened sails.");
+//                Debug.Log($"Opened a sail, now having {_sailsOpen} opened sails.");
             }
         }
 
-        private void CloseSail()
+        public void CloseSail()
         {
             if (ChangeOpenSailCount(-1))
             {
-                Debug.Log($"Closed a sail, now having {_sailsOpen} opened sails.");
+//                Debug.Log($"Closed a sail, now having {_sailsOpen} opened sails.");
             }
+        }
+
+        public float GetCurrentVelocity()
+        {
+            return _currentVelocity;
         }
 
         private bool ChangeOpenSailCount(int sailCountChange)
@@ -129,5 +153,33 @@ namespace Ship
             _rudderPosition = Mathf.Clamp(newRudderPosition, RudderPositionMin, RudderPositionMax);
             return true;
         }
+        
+        
+        public static ShipControl FindShipControlInParents(GameObject otherGameObject)
+        {
+            var shipControl = otherGameObject.GetComponent<ShipControl>();
+            if (shipControl != null)
+            {
+                return shipControl;
+            }
+
+            if (otherGameObject.transform.parent != null)
+            {
+                return FindShipControlInParents(otherGameObject.transform.parent.gameObject);
+            }
+
+            return null;
+        }
+
+        public int OpenedSails()
+        {
+            return _sailsOpen;
+        }
+
+        public float RudderPosition()
+        {
+            return Mathf.Abs(_rudderPosition) < RudderDeadZone ? 0 : _rudderPosition;
+        }
+        
     }
 }

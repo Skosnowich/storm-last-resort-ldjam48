@@ -58,6 +58,7 @@ Material:
     m_Colors:
     - CausticsColor: {r: 0.79607844, g: 0.85882354, b: 0.9882353, a: 0}
     - CausticsSpeed: {r: 0.05, g: 0.05, b: 0, a: 0}
+    - Tint: {r: 1, g: 1, b: 1, a: 1}
     - WaterColor: {r: 0.38823527, g: 0.6078432, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}

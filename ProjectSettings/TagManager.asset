@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlayerShip
   layers:
   - Default
   - TransparentFX
@@ -12,9 +13,9 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
+  - Ship
+  - FiringArc
+  - CannonBall
   - 
   - 
   - 
@@ -41,6 +42,12 @@ TagManager:
   - name: TileMap
     uniqueID: 477937779
     locked: 0
+  - name: FiringArc
+    uniqueID: 673636243
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: IngameUI
+    uniqueID: 398512735
     locked: 0
