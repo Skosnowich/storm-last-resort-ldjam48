@@ -68,8 +68,6 @@ namespace Enemy
                     }
                 }
                 
-                Debug.Log(gameObject.name + " - " + _avoidanceChangeCooldown + " - " + (avoidCollisionLeftDistance != null) + " - "  + (avoidCollisionRightDistance != null));
-
                 if (_avoidanceChangeCooldown <= 0)
                 {
                     if (avoidCollisionLeftDistance != null && (avoidCollisionRightDistance == null || avoidCollisionLeftDistance < avoidCollisionRightDistance))
