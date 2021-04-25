@@ -88,29 +88,31 @@ namespace Ship
         {
             if (IsReady())
             {
-                targetPosition = _collider.ClosestPoint(targetPosition);
+                if (_ownShipControl.Team == Team.Player)
+                {
+                    targetPosition = _collider.ClosestPoint(targetPosition);
+                }
 
                 Debug.Log($"FIRE at {targetPosition}!");
                 var ownPosition = (Vector2) _ownShipControl.transform.position;
-                var direction = targetPosition - ownPosition;
-                if (_ownShipControl.Team == Team.Player)
-                {
-                    direction = direction.normalized * MaxDistance;
-                }
-                else
-                {
-                    direction = direction * 1.05F;
-                }
-                direction = Vector3.ClampMagnitude(direction, MaxDistance);
 
                 var cannonDistance = CannonBallLength / CannonBallCount;
 
                 for (int i = 0; i < CannonBallCount; i++)
                 {
-                    
                     var y = -CannonBallLength / 2 + cannonDistance * i;
                     var offset = (Vector2) transform.right * -1 * CannonXOffset + (Vector2) transform.up * y;
                     var cannonPosition = ownPosition + offset;
+                    
+                    var direction = targetPosition - cannonPosition;
+                    if (_ownShipControl.Team == Team.Player)
+                    {
+                        direction = direction.normalized * MaxDistance;
+                    }
+                    else
+                    {
+                        direction = direction * 1.1F;
+                    }
 
                     var cannonBallGameObject = Instantiate(CannonBallPrefab, cannonPosition, Quaternion.identity);
                     var cannonBall = cannonBallGameObject.GetComponent<CannonBall>();
@@ -121,10 +123,6 @@ namespace Ship
                 }
 
                 _remainingReadyUpTime += ReadyUpTime;
-            }
-            else
-            {
-                Debug.Log("not ready to fire :(");
             }
         }
 
