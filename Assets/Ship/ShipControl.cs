@@ -8,6 +8,7 @@ namespace Ship
     [RequireComponent(typeof(Rigidbody2D))]
     public class ShipControl : MonoBehaviour
     {
+        public bool Invincible;
         public Team Team = Team.Enemy;
         public int SailsOpenMin = 0;
         public int SailsOpenMax = 3;
@@ -90,7 +91,10 @@ namespace Ship
 
         private void Die()
         {
-            Destroy(gameObject);
+            if (!Invincible)
+            {
+                Destroy(gameObject);
+            }
         }
 
         public void SteerRight()

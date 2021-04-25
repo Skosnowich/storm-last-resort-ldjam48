@@ -232,7 +232,7 @@ Transform:
   - {fileID: 1644877397}
   - {fileID: 1832394345}
   m_Father: {fileID: 1427984113}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &80321456
 GameObject:
@@ -336,12 +336,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146868798}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1427984113}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &146868800
 MonoBehaviour:
@@ -441,6 +441,8 @@ MonoBehaviour:
   ShipControl: {fileID: 1427984114}
   MaxLookAhead: 1.25
   MaxVelocity: 3
+  MinSize: 12
+  MaxSize: 24
 --- !u!1 &262700499
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,12 +2187,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 146868799}
   - {fileID: 1845200635}
   - {fileID: 60586186}
   - {fileID: 968115085}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1427984114
 MonoBehaviour:
@@ -2204,6 +2205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8020c1265c0e944692f1016e167bcad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Invincible: 0
   Team: 1
   SailsOpenMin: 0
   SailsOpenMax: 3
@@ -3017,6 +3019,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1791585596}
+  - component: {fileID: 1791585598}
   - component: {fileID: 1791585597}
   - component: {fileID: 1791585595}
   - component: {fileID: 1791585594}
@@ -3076,6 +3079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8020c1265c0e944692f1016e167bcad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Invincible: 0
   Team: 0
   SailsOpenMin: 0
   SailsOpenMax: 3
@@ -3103,7 +3107,7 @@ Transform:
   - {fileID: 421527876}
   - {fileID: 1152205714}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1791585597
 MonoBehaviour:
@@ -3119,6 +3123,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RightFiringArc: {fileID: 1525991333}
   LeftFiringArc: {fileID: 565064536}
+--- !u!114 &1791585598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791585592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b102e6a328cbf904d9dff0591dd00a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepInDistance: 12
+  KeepInDistanceRaycast: 16
+  KeepInSidesAngle: 30
+  ShipLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  LeftFiringArcControl: {fileID: 565064536}
+  RightFiringArcControl: {fileID: 1525991333}
+  _steeringAim: 0
+  _sailAim: 0
 --- !u!1 &1828912645
 GameObject:
   m_ObjectHideFlags: 0
@@ -3364,7 +3390,7 @@ Transform:
   m_LocalScale: {x: 1000, y: 1000, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1845200635 stripped
 Transform:
@@ -3784,7 +3810,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 495649440713558026, guid: 377ee557577511940a7dd56b533a1ec8, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 495649440713558026, guid: 377ee557577511940a7dd56b533a1ec8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3841,7 +3867,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3578778847492777476, guid: ffc633c35d42ff74ea2e7152ee93fab7, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3578778847492777476, guid: ffc633c35d42ff74ea2e7152ee93fab7, type: 3}
       propertyPath: m_LocalPosition.x
