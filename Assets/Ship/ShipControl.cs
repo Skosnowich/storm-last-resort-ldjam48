@@ -19,7 +19,6 @@ namespace Ship
         public float SteeringSpeed = 30;
         public float RudderDeadZone = 2.5F;
         public float MaxHullHealth = 100;
-        public float MaxSailHealth = 100;
         public float MaxCrewHealth = 50;
 
         private float _rudderPosition;
@@ -30,7 +29,6 @@ namespace Ship
         private Bars _bars;
 
         private float _currentHullHealth;
-        private float _currentSailHealth;
         private float _currentCrewHealth;
 
         private void Start()
@@ -39,7 +37,6 @@ namespace Ship
             _bars = GetComponent<Bars>();
 
             _currentHullHealth = MaxHullHealth;
-            _currentSailHealth = MaxSailHealth;
             _currentCrewHealth = MaxCrewHealth;
         }
 
