@@ -10,6 +10,10 @@ public class GlobalGameState : MonoBehaviour
     public static int CannonCount;
     public static int ReadyUpTime;
 
+    public static Stage Stage;
+
+    public static int Gold;
+
     private static bool _initialized;
     private static bool _paused;
 
@@ -30,7 +34,9 @@ public class GlobalGameState : MonoBehaviour
         MaxHullHealth = 100;
         MaxCrewHealth = 50;
         CannonCount = 5;
-        ReadyUpTime = 10;
+        ReadyUpTime = 8;
+        Gold = 100;
+        Stage = Stage._1_Introduction;
 
         CurrentHullHealth = MaxHullHealth;
         CurrentCrewHealth = MaxCrewHealth;

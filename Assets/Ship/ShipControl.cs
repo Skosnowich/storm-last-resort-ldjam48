@@ -1,6 +1,5 @@
 using System;
 using UI;
-using UnityEditor;
 using UnityEngine;
 
 namespace Ship
@@ -20,6 +19,7 @@ namespace Ship
         public float RudderDeadZone = 2.5F;
         public float MaxHullHealth = 100;
         public float MaxCrewHealth = 50;
+        public float SpeedModifier = 1F;
 
         private float _rudderPosition;
         private int _sailsOpen;
@@ -53,12 +53,12 @@ namespace Ship
                     _currentVelocity = Mathf.Max(_currentVelocity - Time.deltaTime * BreakTime, _sailsOpen);
                 }
 
-                _rigidbody.velocity = transform.up * _currentVelocity;
+                _rigidbody.velocity = transform.up * _currentVelocity * SpeedModifier;
 
                 if (_currentVelocity > 0.1f)
                 {
                     var rudderPositionWithAppliedDeadZone = RudderPosition();
-                    _rigidbody.angularVelocity = -rudderPositionWithAppliedDeadZone / SailsOpenMax * _currentVelocity;
+                    _rigidbody.angularVelocity = -rudderPositionWithAppliedDeadZone / SailsOpenMax * _currentVelocity * SpeedModifier;
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace Ship
         public void ChangeHullHealth(float healthChange)
         {
             _currentHullHealth = Mathf.Clamp(_currentHullHealth + healthChange, 0, MaxHullHealth);
-            
+
             var died = false;
             if (Math.Abs(_currentHullHealth) < 0.01f)
             {
@@ -128,7 +128,7 @@ namespace Ship
 
         public float GetCurrentVelocity()
         {
-            return _currentVelocity;
+            return _currentVelocity * SpeedModifier;
         }
 
         private bool ChangeOpenSailCount(int sailCountChange)
@@ -154,8 +154,7 @@ namespace Ship
             _rudderPosition = Mathf.Clamp(newRudderPosition, RudderPositionMin, RudderPositionMax);
             return true;
         }
-        
-        
+
         public static ShipControl FindShipControlInParents(GameObject otherGameObject)
         {
             var shipControl = otherGameObject.GetComponent<ShipControl>();
@@ -181,6 +180,27 @@ namespace Ship
         {
             return Mathf.Abs(_rudderPosition) < RudderDeadZone ? 0 : _rudderPosition;
         }
-        
+
+        public void UpdateFromGlobalGameState()
+        {
+            MaxCrewHealth = GlobalGameState.MaxCrewHealth;
+            MaxHullHealth = GlobalGameState.MaxHullHealth;
+            _currentCrewHealth = GlobalGameState.CurrentCrewHealth;
+            _currentHullHealth = GlobalGameState.CurrentHullHealth;
+            var firingArcControls = GetComponentsInChildren<FiringArcControl>();
+            foreach (var firingArcControl in firingArcControls)
+            {
+                firingArcControl.CannonBallCount = GlobalGameState.CannonCount;
+                firingArcControl.ReadyUpTime = GlobalGameState.ReadyUpTime;
+            }
+        }
+
+        public void UpdateToGlobalGameState()
+        {
+            GlobalGameState.MaxCrewHealth = Mathf.RoundToInt(MaxCrewHealth);
+            GlobalGameState.MaxHullHealth = Mathf.RoundToInt(MaxHullHealth);
+            GlobalGameState.CurrentCrewHealth = Mathf.RoundToInt(_currentCrewHealth);
+            GlobalGameState.CurrentHullHealth = Mathf.RoundToInt(_currentHullHealth);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace UI
         public UIBar HullHealthBar;
         public UIBar CrewHealthBar;
         public LabelValue CannonLabelValue;
-        public LabelValue ReloadTimeLabelValue;
+        public LabelValue GoldLabelValue;
 
         private void Update()
         {
@@ -20,7 +20,8 @@ namespace UI
             CrewHealthBar.MaxValue = GlobalGameState.MaxCrewHealth;
             
             CannonLabelValue.Value = GlobalGameState.CannonCount;
-            ReloadTimeLabelValue.Value = GlobalGameState.ReadyUpTime;
+
+            GoldLabelValue.Value = GlobalGameState.Gold;
         }
     }
 }
