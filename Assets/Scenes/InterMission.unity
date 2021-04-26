@@ -644,7 +644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b10282324f52f439c71d8f78d51644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StageOverride: 1
+  StageOverride: 0
   StartStage: 3
   HeadlineLabel: {fileID: 731844278}
   TextLabel: {fileID: 1781722209}
