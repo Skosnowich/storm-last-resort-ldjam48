@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GlobalGameState : MonoBehaviour
@@ -61,5 +62,21 @@ public class GlobalGameState : MonoBehaviour
     public static bool IsUnpaused()
     {
         return !_paused;
+    }
+
+    public static void ChangeCrewHealth(int amount)
+    {
+        CurrentCrewHealth = Math.Min(CurrentCrewHealth + amount, MaxCrewHealth);
+    }
+
+    public static void ChangeHullHealth(int amount)
+    {
+        CurrentHullHealth = Math.Min(CurrentHullHealth + amount, MaxHullHealth);
+    }
+
+    public static void ChangeMaxHullHealth(int amount)
+    {
+        MaxHullHealth += amount;
+        CurrentHullHealth += amount;
     }
 }

@@ -1,12 +1,17 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI
 {
     public class IntermissionMenuControl : MonoBehaviour
     {
+        public bool StageOverride;
+        public Stage StartStage;
+        
         public Text HeadlineLabel;
         public Text TextLabel;
         public Button OptionOneButton;
@@ -19,7 +24,12 @@ namespace UI
 
         private void Start()
         {
-            UpdateToStage(GlobalGameState.Stage);
+            if (!StageOverride)
+            {
+                StartStage = GlobalGameState.Stage;
+            }
+            
+            UpdateToStage(StartStage);
         }
 
         private void UpdateToStage(Stage stage)
@@ -158,13 +168,24 @@ namespace UI
                     switch (_optionChosen)
                     {
                         case 1:
-                            // TODO add gold 30 + Random (10 - 20)
+                            var randomGoldAmount = Random.Range(10, 21);
+                            var totalGoldAmount = 30 + randomGoldAmount;
+                            GlobalGameState.Gold += totalGoldAmount;
+                            
+                            _result = $"You looted {totalGoldAmount} gold from the scout.";
                             break;
                         case 2:
-                            // TODO (2 sailors + Random (0-2)) 
+                            var randomSailorAmount = Random.Range(1, 3);
+                            var totalSailorAmount = 2 + randomSailorAmount;
+                            GlobalGameState.ChangeCrewHealth(totalSailorAmount);
+                            
+                            _result = $"You rescued sailors and {totalSailorAmount} of them decided to join your crew.";
                             break;
                         case 3:
-                            // TODO (repair +20)
+                            var totalRepairAmount = 20 + Mathf.RoundToInt(10 * ((float) GlobalGameState.CurrentCrewHealth / GlobalGameState.MaxCrewHealth));
+                            GlobalGameState.ChangeHullHealth(totalRepairAmount);
+                            
+                            _result = $"Your crew managed to repair some damage you took in the battle (+{totalRepairAmount} hull health).";
                             break;
                     }
 
