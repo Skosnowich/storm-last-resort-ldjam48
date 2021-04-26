@@ -93,6 +93,25 @@ namespace Ship
             }
         }
 
+        public void ChangeCrewHealth(float healthChange)
+        {
+            _currentCrewHealth = Mathf.Clamp(_currentCrewHealth + healthChange, 0, MaxCrewHealth);
+
+            var died = false;
+            if (Math.Abs(_currentCrewHealth) < 0.01f)
+            {
+                died = true;
+                _currentCrewHealth = 0;
+            }
+
+            _bars.CrewBar.Value = _currentCrewHealth / MaxCrewHealth;
+
+            if (died)
+            {
+                Die();
+            }
+        }
+
         private void Die()
         {
             if (!Invincible)
@@ -244,6 +263,11 @@ namespace Ship
         {
             Debug.Log($"{gameObject.name} crashed into something for {collisionDamage} damage.");
             ChangeHullHealth(-collisionDamage);
+        }
+
+        public float CurrentCrewHealth()
+        {
+            return _currentCrewHealth;
         }
     }
 }

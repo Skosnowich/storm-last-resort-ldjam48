@@ -2411,6 +2411,10 @@ PrefabInstance:
       value: EnemyShip
       objectReference: {fileID: 0}
     - target: {fileID: 3380566322793748403, guid: 728e2c11ef1e49547bccf24f69522cc9, type: 3}
+      propertyPath: MaxCrewHealth
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3380566322793748403, guid: 728e2c11ef1e49547bccf24f69522cc9, type: 3}
       propertyPath: MaxHullHealth
       value: 50
       objectReference: {fileID: 0}

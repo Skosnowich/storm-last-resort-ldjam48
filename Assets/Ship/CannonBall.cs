@@ -8,6 +8,7 @@ namespace Ship
         public Vector2 Speed;
         public ShipControl OriginShip;
         public float Damage;
+        public float CrewDamage;
 
         private float _travelledDistance;
         private float _speed;
@@ -40,6 +41,7 @@ namespace Ship
                 Debug.Log($"Hit ship {otherShipControl.gameObject.name}");
                 Destroy(gameObject);
                 otherShipControl.ChangeHullHealth(-Damage);
+                otherShipControl.ChangeCrewHealth(-CrewDamage);
             }
         }
     }

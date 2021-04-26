@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -17,6 +16,8 @@ namespace Ship
         public int CannonBallCount = 5;
         public float CannonBallLength = 1F;
         public float CannonBallDamage = 5F;
+        public float CannonBallCrewDamage = 1F;
+        public float CannonBallCrewDamageProbability = 0.1F;
         public float CannonXOffset;
 
         private List<ShipControl> _shipsInRange;
@@ -54,7 +55,7 @@ namespace Ship
 
                 if (_remainingReadyUpTime > 0)
                 {
-                    _remainingReadyUpTime -= Time.deltaTime;
+                    _remainingReadyUpTime -= Time.deltaTime * (_ownShipControl.CurrentCrewHealth() / _ownShipControl.MaxCrewHealth);
                 }
 
                 var maskPosition = ReadySpriteMaskTransform.localPosition;
@@ -67,7 +68,8 @@ namespace Ship
         private void OnTriggerEnter2D(Collider2D other)
         {
             var otherShipControl = ShipControl.FindShipControlInParents(other.gameObject);
-            if (otherShipControl != null && otherShipControl != _ownShipControl && !_shipsInRange.Contains(otherShipControl) && otherShipControl.Team != _ownShipControl.Team)
+            if (otherShipControl != null && otherShipControl != _ownShipControl && !_shipsInRange.Contains(otherShipControl) &&
+                otherShipControl.Team != _ownShipControl.Team)
             {
                 _shipsInRange.Add(otherShipControl);
                 Debug.Log($"Added shipControl to inRange {otherShipControl.gameObject.name}");
@@ -103,7 +105,7 @@ namespace Ship
                     var y = -CannonBallLength / 2 + cannonDistance * i;
                     var offset = (Vector2) transform.right * -1 * CannonXOffset + (Vector2) transform.up * y;
                     var cannonPosition = ownPosition + offset;
-                    
+
                     var direction = targetPosition - cannonPosition;
                     if (_ownShipControl.Team == Team.Player)
                     {
@@ -122,6 +124,7 @@ namespace Ship
                     cannonBall.Speed = direction.normalized * CannonBallSpeed;
                     cannonBall.OriginShip = _ownShipControl;
                     cannonBall.Damage = CannonBallDamage;
+                    cannonBall.CrewDamage = Random.Range(0, 1) <= CannonBallCrewDamageProbability ? CannonBallCrewDamage : 0;
                 }
 
                 _remainingReadyUpTime += ReadyUpTime;

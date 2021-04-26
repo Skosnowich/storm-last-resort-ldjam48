@@ -35,7 +35,7 @@ public class GlobalGameState : MonoBehaviour
         MaxHullHealth = 100;
         MaxCrewHealth = 50;
         CannonCount = 5;
-        ReadyUpTime = 8;
+        ReadyUpTime = 7;
         Gold = 100;
         Stage = Stage._1_Introduction;
 
