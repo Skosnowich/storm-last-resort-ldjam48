@@ -20,6 +20,10 @@ namespace Ship
         public float MaxHullHealth = 100;
         public float MaxCrewHealth = 50;
         public float SpeedModifier = 1F;
+        public float CollisionFrontAngle = 30F;
+        public float MaxCollisionDamage = 20F;
+        public float MinSpeedForCollisionDamage = 0.5F;
+        public LayerMask ShipLayerMask;
 
         private float _rudderPosition;
         private int _sailsOpen;
@@ -30,6 +34,8 @@ namespace Ship
 
         private float _currentHullHealth;
         private float _currentCrewHealth;
+
+        private float _lastCrash;
 
         private void Start()
         {
@@ -44,6 +50,7 @@ namespace Ship
         {
             if (GlobalGameState.IsUnpaused())
             {
+                _lastCrash = _lastCrash > 0 ? _lastCrash - Time.deltaTime : 0;
                 if (_currentVelocity < _sailsOpen)
                 {
                     _currentVelocity = Mathf.Min(_currentVelocity + Time.deltaTime * SpeedUpTime * _sailsOpen, _sailsOpen);
@@ -201,6 +208,42 @@ namespace Ship
             GlobalGameState.MaxHullHealth = Mathf.RoundToInt(MaxHullHealth);
             GlobalGameState.CurrentCrewHealth = Mathf.RoundToInt(_currentCrewHealth);
             GlobalGameState.CurrentHullHealth = Mathf.RoundToInt(_currentHullHealth);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, 0, CollisionFrontAngle) * transform.up * 2);
+            Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, 0, -CollisionFrontAngle) * transform.up * 2);
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            if (_lastCrash <= 0 && other.collider.IsTouchingLayers(ShipLayerMask))
+            {
+                var otherShipControl = FindShipControlInParents(other.gameObject);
+                if (otherShipControl != null)
+                {
+                    _lastCrash = 2.5f;
+                    var directionToOtherShip =  otherShipControl.transform.position - transform.position;
+                    var angle = Vector2.SignedAngle(transform.up, directionToOtherShip);
+
+                    var velocity = _rigidbody.velocity;
+                    var othersVelocity = otherShipControl._rigidbody.velocity;
+                    var velocityDifference = (othersVelocity - velocity).magnitude;
+                    var collisionModifier = (MaxCollisionDamage) * Math.Max(0, 1 - Math.Abs(angle) / CollisionFrontAngle);
+                    var collisionDamage = collisionModifier + MaxCollisionDamage *
+                                          Math.Max(0, velocityDifference + MinSpeedForCollisionDamage) / (SailsOpenMax * 2 + MinSpeedForCollisionDamage);
+
+                    Crash(collisionDamage);
+                }
+            }
+        }
+
+        private void Crash(float collisionDamage)
+        {
+            Debug.Log($"{gameObject.name} crashed into something for {collisionDamage} damage.");
+            ChangeHullHealth(-collisionDamage);
         }
     }
 }

@@ -233,6 +233,12 @@ MonoBehaviour:
   MaxHullHealth: 100
   MaxCrewHealth: 50
   SpeedModifier: 1
+  CollisionFrontAngle: 45
+  MaxCollisionDamage: 15
+  MinSpeedForCollisionDamage: 0.5
+  ShipLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &3380566322793748402
 MonoBehaviour:
   m_ObjectHideFlags: 0

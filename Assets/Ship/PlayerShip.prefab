@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 3390780575917169999}
   - component: {fileID: 3390780575917169998}
   m_Layer: 0
-  m_Name: Ship
+  m_Name: PlayerShip
   m_TagString: PlayerShip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,6 +134,13 @@ MonoBehaviour:
   RudderDeadZone: 2.5
   MaxHullHealth: 100
   MaxCrewHealth: 50
+  SpeedModifier: 1
+  CollisionFrontAngle: 45
+  MaxCollisionDamage: 15
+  MinSpeedForCollisionDamage: 0.5
+  ShipLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!50 &3390780575917169998
 Rigidbody2D:
   serializedVersion: 4
