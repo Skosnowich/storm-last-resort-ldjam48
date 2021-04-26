@@ -581,7 +581,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -1412771940248072963, guid: ebe07cecc8155cc47bbb47c45a951329, type: 2}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 75b0d938dd2abdd4c9a4e29b33074c25, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1578,8 +1578,8 @@ PrefabInstance:
         Left
         Mouse Button - fire where you aim when cannons are ready
 
-        ESC - Enter
-        pause menu'
+        P/ESC -
+        Enter pause menu'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3354e1b130538144974292f4fa5b754, type: 3}

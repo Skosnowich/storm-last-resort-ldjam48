@@ -4,102 +4,107 @@ using UnityEngine.Audio;
 
 namespace Audio
 {
-	public class SoundManager : MonoBehaviour
-	{
-		public int MaxAudioSourceCount = 3;
-		public float MinimumPlayDuration = 1;
-		public float MinRange = 10;
-		public float MaxRange = 100;
+    public class SoundManager : MonoBehaviour
+    {
+        public int MaxAudioSourceCount = 3;
+        public float MinimumPlayDuration = 1;
+        public float MinRange = 10;
+        public float MaxRange = 100;
 
-		public Transform AudioSourcePrefab;
+        public Transform AudioSourcePrefab;
 
-		private Transform _audioSourceGroup;
-		private int _audioSourceCount;
-		private Dictionary<string, AudioSource> _loopingAudioSources;
+        private Transform _audioSourceGroup;
+        private int _audioSourceCount;
+        private Dictionary<string, AudioSource> _loopingAudioSources;
 
-		private void Start()
-		{
-			_audioSourceGroup = new GameObject("AudioSourceGroup").transform;
-			_audioSourceGroup.parent = GetComponent<Transform>();
-			_loopingAudioSources = new Dictionary<string, AudioSource>();
-		}
+        public static SoundManager FindByTag()
+        {
+            return GameObject.FindWithTag("SoundManager").GetComponent<SoundManager>();
+        }
 
-		public void PlaySoundUnmodified(AudioClip audioClip, AudioMixerGroup audioMixerGroup, string loopingIdentifier = null)
-		{
-			PlaySound(audioClip, audioMixerGroup, 1, 1, 0, 0, MinRange, MaxRange, loopingIdentifier);
-		}
+        private void Start()
+        {
+            _audioSourceGroup = new GameObject("AudioSourceGroup-" + gameObject.name).transform;
+            _loopingAudioSources = new Dictionary<string, AudioSource>();
+        }
 
-		public void PlaySound(AudioClip audioClip, AudioMixerGroup audioMixerGroup, float? minRange = null, float? maxRange = null, float pitchMin = .975f, float pitchMax = 1.025f,
-			float panMin = -0.05F, float panMax = 0.05F, string loopingIdentifier = null)
-		{
-			var audioSource = GetFreeAudioSource();
-			if (audioSource == null)
-			{
-				Debug.Log("Keine freie Audioquelle gefunden -> Sound nicht abgespielt.");
-				return;
-			}
+        public void PlaySoundUnmodified(AudioClip audioClip, AudioMixerGroup audioMixerGroup, string loopingIdentifier = null)
+        {
+            PlaySound(audioClip, audioMixerGroup, 1, 1, 0, 0, MinRange, MaxRange, loopingIdentifier);
+        }
 
-			audioSource.Stop();
+        public void PlaySound(AudioClip audioClip, AudioMixerGroup audioMixerGroup, float? minRange = null, float? maxRange = null, float pitchMin = .975f,
+            float pitchMax = 1.025f,
+            float panMin = -0.05F, float panMax = 0.05F, string loopingIdentifier = null)
+        {
+            var audioSource = GetFreeAudioSource();
+            if (audioSource == null)
+            {
+                Debug.Log("Keine freie Audioquelle gefunden -> Sound nicht abgespielt.");
+                return;
+            }
 
-			if (loopingIdentifier != null)
-			{
-				_loopingAudioSources.Add(loopingIdentifier, audioSource);
-				audioSource.loop = true;
-			}
+            audioSource.Stop();
 
-			audioSource.minDistance = minRange ?? MinRange;
-			audioSource.maxDistance = maxRange ?? MaxRange;
+            if (loopingIdentifier != null)
+            {
+                _loopingAudioSources.Add(loopingIdentifier, audioSource);
+                audioSource.loop = true;
+            }
 
-			audioSource.clip = audioClip;
-			audioSource.outputAudioMixerGroup = audioMixerGroup;
+            audioSource.minDistance = minRange ?? MinRange;
+            audioSource.maxDistance = maxRange ?? MaxRange;
 
-			audioSource.pitch = Random.Range(pitchMin, pitchMax);
-			audioSource.panStereo = Random.Range(panMin, panMax);
+            audioSource.clip = audioClip;
+            audioSource.outputAudioMixerGroup = audioMixerGroup;
 
-			audioSource.volume = 1;
-			audioSource.Play();
-		}
+            audioSource.pitch = Random.Range(pitchMin, pitchMax);
+            audioSource.panStereo = Random.Range(panMin, panMax);
 
-		public void StopLooping(string loopingIdentifier)
-		{
-			var loopingAudioSource = _loopingAudioSources[loopingIdentifier];
-			loopingAudioSource.Stop();
-			loopingAudioSource.loop = false;
-			_loopingAudioSources.Remove(loopingIdentifier);
-		}
+            audioSource.volume = 1;
+            audioSource.Play();
+        }
 
-		private AudioSource GetFreeAudioSource()
-		{
-			float latestTime = float.MinValue;
-			AudioSource latestAudioSource = null;
-			for (int i = 0; i < _audioSourceCount; i++)
-			{
-				var audioSource = _audioSourceGroup.GetChild(i).GetComponent<AudioSource>();
-				if (!audioSource.isPlaying)
-				{
-					return audioSource;
-				}
+        public void StopLooping(string loopingIdentifier)
+        {
+            var loopingAudioSource = _loopingAudioSources[loopingIdentifier];
+            loopingAudioSource.Stop();
+            loopingAudioSource.loop = false;
+            _loopingAudioSources.Remove(loopingIdentifier);
+        }
 
-				if (!audioSource.loop)
-				{
-					var audioSourceTime = audioSource.time;
-					if (audioSourceTime > latestTime && audioSourceTime > MinimumPlayDuration)
-					{
-						latestTime = audioSourceTime;
-						latestAudioSource = audioSource;
-					}
-				}
-			}
+        private AudioSource GetFreeAudioSource()
+        {
+            float latestTime = float.MinValue;
+            AudioSource latestAudioSource = null;
+            for (int i = 0; i < _audioSourceCount; i++)
+            {
+                var audioSource = _audioSourceGroup.GetChild(i).GetComponent<AudioSource>();
+                if (!audioSource.isPlaying)
+                {
+                    return audioSource;
+                }
 
-			if (_audioSourceCount < MaxAudioSourceCount)
-			{
-				_audioSourceCount++;
-				var audioSourceParent = Instantiate(AudioSourcePrefab, _audioSourceGroup);
-				audioSourceParent.gameObject.SetActive(true);
-				return audioSourceParent.GetComponent<AudioSource>();
-			}
+                if (!audioSource.loop)
+                {
+                    var audioSourceTime = audioSource.time;
+                    if (audioSourceTime > latestTime && audioSourceTime > MinimumPlayDuration)
+                    {
+                        latestTime = audioSourceTime;
+                        latestAudioSource = audioSource;
+                    }
+                }
+            }
 
-			return latestAudioSource;
-		}
-	}
+            if (_audioSourceCount < MaxAudioSourceCount)
+            {
+                _audioSourceCount++;
+                var audioSourceParent = Instantiate(AudioSourcePrefab, _audioSourceGroup);
+                audioSourceParent.gameObject.SetActive(true);
+                return audioSourceParent.GetComponent<AudioSource>();
+            }
+
+            return latestAudioSource;
+        }
+    }
 }

@@ -14,7 +14,7 @@ namespace Ship
 
         private void Update()
         {
-            if (GlobalGameState.IsUnpaused())
+            if (GlobalGameState.IsUnpaused() && _shipControl != null && _shipControl.CurrentCrewHealth() >= 0.01F)
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {

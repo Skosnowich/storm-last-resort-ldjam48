@@ -67,7 +67,7 @@ namespace Audio
 
         private void PlayTestSound()
         {
-            if (!_audioSource.isPlaying)
+            if (!_audioSource.isPlaying || _audioSource.time > 0.5F)
             {
                 _audioSource.Play();
             }

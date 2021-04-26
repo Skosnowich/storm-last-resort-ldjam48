@@ -34,7 +34,7 @@ namespace Enemy
 
         private void Update()
         {
-            if (GlobalGameState.IsUnpaused())
+            if (GlobalGameState.IsUnpaused() && _shipControl != null && _shipControl.CurrentCrewHealth() >= 0.01F)
             {
                 var collisionAvoidanceLeftRaycastHits = Physics2D.RaycastAll(_transform.position - _transform.right * .5f, _transform.up,
                     _shipControl.GetCurrentVelocity() * CollisionAvoidanceLookAheadRange, ShipLayerMask);

@@ -47,6 +47,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Distance: 0
   Speed: {x: 0, y: 0}
+  OriginShip: {fileID: 0}
+  Damage: 0
+  CrewDamage: 0
+  AudioMixerGroup: {fileID: -1412771940248072963, guid: ebe07cecc8155cc47bbb47c45a951329, type: 2}
+  EnemyCannonShotAudio: {fileID: 8300000, guid: 186b2d8470ffae94bbb271ce32408c20, type: 3}
+  PlayerCannonShotAudio: {fileID: 8300000, guid: 75b0d938dd2abdd4c9a4e29b33074c25, type: 3}
+  FallInWaterAudio: {fileID: 8300000, guid: 3850f2df570f5c24d85a5cd1171eb3e6, type: 3}
+  HitAudio: {fileID: 8300000, guid: 6fe951a3d30f7c54dbd39f29e877cf8e, type: 3}
 --- !u!50 &7787342003661162963
 Rigidbody2D:
   serializedVersion: 4

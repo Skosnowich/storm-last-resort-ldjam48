@@ -12,6 +12,7 @@ public class GlobalGameState : MonoBehaviour
     public static int ReadyUpTime;
 
     public static Stage Stage;
+    public static Stage LostStage;
 
     public static int Gold;
 

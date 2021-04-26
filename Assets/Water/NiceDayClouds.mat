@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaterMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 40ba569dc839f7244ab456da539cae11, type: 3}
+  m_Name: NiceDayClouds
+  m_Shader: {fileID: -6465566751694194690, guid: c135984dfcf796e45bd5ba5b1a1591b4, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -52,14 +52,19 @@ Material:
     - CausticsMovement: 2
     - CausticsPower: 4
     - CausticsScale: 3
+    - CloudAlphaModifier: 1
+    - CloudScale: 200
+    - CloudSpeed: 0.01
     - RefractionAmount: 0.49
     - Scale: 1000
     - _EnableExternalAlpha: 0
     m_Colors:
     - CausticsColor: {r: 0.79607844, g: 0.85882354, b: 0.9882353, a: 0}
     - CausticsSpeed: {r: 0.05, g: 0.05, b: 0, a: 0}
+    - CloudColor: {r: 0.082352914, g: 0, b: 0.24705875, a: 1}
+    - CloudSpeed: {r: 0.005, g: 0.005, b: 0, a: 0}
     - Tint: {r: 1, g: 1, b: 1, a: 1}
-    - WaterColor: {r: 0.38823527, g: 0.6078432, b: 1, a: 0}
+    - WaterColor: {r: 0.08235294, g: 0, b: 0.24705882, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

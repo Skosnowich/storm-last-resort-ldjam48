@@ -104,7 +104,8 @@ namespace UI
                         {
                             "- you lost!"
                         },
-                        "Back to Main Menu and try again"
+                        "Back to Main Menu and start a new adventure. (Ironman Mode)",
+                        "Do some voodoo and retry battle. (Easy Mode)"
                     );
                     break;
                 default:
@@ -192,8 +193,20 @@ namespace UI
                     UpdateToStage(Stage._END_Won);
                     break;
                 case Stage._END_Won:
-                case Stage._END_GameOver:
                     SceneManager.LoadScene("MainMenu");
+                    break;
+                case Stage._END_GameOver:
+                    switch (_optionChosen)
+                    {
+                        case 1:
+                            SceneManager.LoadScene("MainMenu");
+                            break;
+                        case 2:
+                            GlobalGameState.Stage = GlobalGameState.LostStage;
+                            SceneManager.LoadScene("GameScene");
+                            break;
+                    }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

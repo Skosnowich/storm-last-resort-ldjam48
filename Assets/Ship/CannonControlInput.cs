@@ -9,16 +9,17 @@ namespace Ship
 
         private UnityEngine.Camera _camera;
         private FiringArcControl _activeFiringArc;
-
+        private ShipControl _shipControl;
 
         private void Start()
         {
             _camera = GameObject.FindWithTag("MainCamera").GetComponent<UnityEngine.Camera>();
+            _shipControl = ShipControl.FindShipControlInParents(gameObject);
         }
 
         private void Update()
         {
-            if (GlobalGameState.IsUnpaused())
+            if (GlobalGameState.IsUnpaused() && _shipControl != null && _shipControl.CurrentCrewHealth() >= 0.01F)
             {
                 ChooseActiveFiringArc();
 

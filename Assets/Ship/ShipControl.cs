@@ -1,6 +1,8 @@
 using System;
+using Audio;
 using UI;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Ship
 {
@@ -25,6 +27,15 @@ namespace Ship
         public float MinSpeedForCollisionDamage = 0.5F;
         public float HullHealthSpeedReductionDeadZone = .2F;
         public LayerMask ShipLayerMask;
+       
+
+        public AudioMixerGroup PlayerAudioMixerGroup;
+        public AudioMixerGroup EnemyAudioMixerGroup;
+        public AudioMixerGroup RudderAudioMixerGroup;
+        public AudioClip RudderAudio;
+        public AudioClip StrikeSailsAudio;
+        public AudioClip SetSailsAudio;
+        public AudioClip CrashAudio;
 
         private float _rudderPosition;
         private int _sailsOpen;
@@ -39,6 +50,8 @@ namespace Ship
 
         private float _lastCrash;
 
+        private SoundManager _soundManager;
+
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -46,6 +59,8 @@ namespace Ship
 
             _currentHullHealth = MaxHullHealth;
             _currentCrewHealth = MaxCrewHealth;
+
+            _soundManager = SoundManager.FindByTag();
         }
 
         private void Update()
@@ -62,7 +77,7 @@ namespace Ship
                     _currentVelocity = Mathf.Max(_currentVelocity - Time.deltaTime * BreakTime, _sailsOpen);
                 }
 
-                _currentVelocityVector = transform.up * ModifiedVelocity(); 
+                _currentVelocityVector = transform.up * ModifiedVelocity();
                 _rigidbody.velocity = _currentVelocityVector;
 
                 if (_currentVelocity > 0.1f)
@@ -117,7 +132,7 @@ namespace Ship
 
         private void Die()
         {
-            if (!Invincible)
+            if (!Invincible && Team == Team.Enemy)
             {
                 Destroy(gameObject);
             }
@@ -125,17 +140,21 @@ namespace Ship
 
         public void SteerRight()
         {
-            if (ChangeRudderPosition(1))
+            if (ChangeRudderPosition(1) && Input.GetKeyDown(KeyCode.D) && Team == Team.Player)
             {
 //                Debug.Log($"Steered right, now at {_rudderPosition}.");
+
+                _soundManager.PlaySound(RudderAudio, RudderAudioMixerGroup, pitchMin: 0.95F, pitchMax: 1.05F);
             }
         }
 
         public void SteerLeft()
         {
-            if (ChangeRudderPosition(-1))
+            if (ChangeRudderPosition(-1) && Input.GetKeyDown(KeyCode.A) && Team == Team.Player)
             {
 //                Debug.Log($"Steered left, now at {_rudderPosition}.");
+
+                _soundManager.PlaySound(RudderAudio, RudderAudioMixerGroup, pitchMin: 0.95F, pitchMax: 1.05F);
             }
         }
 
@@ -143,6 +162,7 @@ namespace Ship
         {
             if (ChangeOpenSailCount(1))
             {
+                _soundManager.PlaySound(SetSailsAudio, Team == Team.Player ? PlayerAudioMixerGroup : EnemyAudioMixerGroup, pitchMin: 0.95F, pitchMax: 1.05F);
 //                Debug.Log($"Opened a sail, now having {_sailsOpen} opened sails.");
             }
         }
@@ -151,6 +171,7 @@ namespace Ship
         {
             if (ChangeOpenSailCount(-1))
             {
+                _soundManager.PlaySound(StrikeSailsAudio, Team == Team.Player ? PlayerAudioMixerGroup : EnemyAudioMixerGroup, pitchMin: 0.95F, pitchMax: 1.05F);
 //                Debug.Log($"Closed a sail, now having {_sailsOpen} opened sails.");
             }
         }
@@ -163,7 +184,6 @@ namespace Ship
         private float ModifiedVelocity()
         {
             return _currentVelocity * SpeedModifier * Math.Min(_currentHullHealth / MaxHullHealth + HullHealthSpeedReductionDeadZone, 1);
-            
         }
 
         private bool ChangeOpenSailCount(int sailCountChange)
@@ -253,7 +273,7 @@ namespace Ship
                 if (otherShipControl != null)
                 {
                     _lastCrash = 2.5f;
-                    var directionToOtherShip =  otherShipControl.transform.position - transform.position;
+                    var directionToOtherShip = otherShipControl.transform.position - transform.position;
                     var angle = Vector2.SignedAngle(transform.up, directionToOtherShip);
 
                     var velocity = _rigidbody.velocity;
@@ -271,12 +291,19 @@ namespace Ship
         private void Crash(float collisionDamage)
         {
             Debug.Log($"{gameObject.name} crashed into something for {collisionDamage} damage.");
+                    
+            _soundManager.PlaySound(CrashAudio, Team == Team.Player ? PlayerAudioMixerGroup : EnemyAudioMixerGroup, pitchMin: 0.90F, pitchMax: 1.1F);
             ChangeHullHealth(-collisionDamage);
         }
 
         public float CurrentCrewHealth()
         {
             return _currentCrewHealth;
+        }
+
+        public float CurrentHullHealth()
+        {
+            return _currentHullHealth;
         }
     }
 }

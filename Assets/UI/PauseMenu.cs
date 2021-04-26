@@ -6,6 +6,7 @@ namespace UI
 {
     public class PauseMenu : MonoBehaviour
     {
+        public GameObject GameOverWindow;
         public GameObject PauseMenuGroup;
         public Text ReallyWantToQuitMessage;
 
@@ -16,7 +17,7 @@ namespace UI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (!GameOverWindow.activeSelf && Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
             {
                 if (GlobalGameState.IsUnpaused())
                 {
