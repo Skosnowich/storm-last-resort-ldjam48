@@ -23,6 +23,7 @@ namespace Ship
         public float CollisionFrontAngle = 30F;
         public float MaxCollisionDamage = 20F;
         public float MinSpeedForCollisionDamage = 0.5F;
+        public float HullHealthSpeedReductionDeadZone = .2F;
         public LayerMask ShipLayerMask;
 
         private float _rudderPosition;
@@ -30,6 +31,7 @@ namespace Ship
         private Rigidbody2D _rigidbody;
 
         private float _currentVelocity;
+        private Vector2 _currentVelocityVector;
         private Bars _bars;
 
         private float _currentHullHealth;
@@ -60,12 +62,13 @@ namespace Ship
                     _currentVelocity = Mathf.Max(_currentVelocity - Time.deltaTime * BreakTime, _sailsOpen);
                 }
 
-                _rigidbody.velocity = transform.up * _currentVelocity * SpeedModifier;
+                _currentVelocityVector = transform.up * ModifiedVelocity(); 
+                _rigidbody.velocity = _currentVelocityVector;
 
                 if (_currentVelocity > 0.1f)
                 {
                     var rudderPositionWithAppliedDeadZone = RudderPosition();
-                    _rigidbody.angularVelocity = -rudderPositionWithAppliedDeadZone / SailsOpenMax * _currentVelocity * SpeedModifier;
+                    _rigidbody.angularVelocity = -rudderPositionWithAppliedDeadZone / SailsOpenMax * ModifiedVelocity();
                 }
                 else
                 {
@@ -154,7 +157,13 @@ namespace Ship
 
         public float GetCurrentVelocity()
         {
-            return _currentVelocity * SpeedModifier;
+            return ModifiedVelocity();
+        }
+
+        private float ModifiedVelocity()
+        {
+            return _currentVelocity * SpeedModifier * Math.Min(_currentHullHealth / MaxHullHealth + HullHealthSpeedReductionDeadZone, 1);
+            
         }
 
         private bool ChangeOpenSailCount(int sailCountChange)

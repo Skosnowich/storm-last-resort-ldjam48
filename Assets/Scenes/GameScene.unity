@@ -2422,6 +2422,10 @@ PrefabInstance:
       propertyPath: SpeedModifier
       value: 1.15
       objectReference: {fileID: 0}
+    - target: {fileID: 3380566322793748403, guid: 728e2c11ef1e49547bccf24f69522cc9, type: 3}
+      propertyPath: HullHealthSpeedReductionDeadZone
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 3380566322793748404, guid: 728e2c11ef1e49547bccf24f69522cc9, type: 3}
       propertyPath: m_RootOrder
       value: 1

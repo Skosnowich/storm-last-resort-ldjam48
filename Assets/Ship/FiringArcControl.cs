@@ -72,7 +72,6 @@ namespace Ship
                 otherShipControl.Team != _ownShipControl.Team)
             {
                 _shipsInRange.Add(otherShipControl);
-                Debug.Log($"Added shipControl to inRange {otherShipControl.gameObject.name}");
             }
         }
 
@@ -81,7 +80,6 @@ namespace Ship
             var otherShipControl = ShipControl.FindShipControlInParents(other.gameObject);
             if (otherShipControl != null && otherShipControl != _ownShipControl && otherShipControl.Team != _ownShipControl.Team)
             {
-                Debug.Log($"Removed shipControl from inRange {otherShipControl.gameObject.name}");
                 _shipsInRange.Remove(otherShipControl);
             }
         }
@@ -95,7 +93,6 @@ namespace Ship
                     targetPosition = _collider.ClosestPoint(targetPosition);
                 }
 
-                Debug.Log($"FIRE at {targetPosition}!");
                 var ownPosition = (Vector2) _ownShipControl.transform.position;
 
                 var cannonDistance = CannonBallLength / CannonBallCount;

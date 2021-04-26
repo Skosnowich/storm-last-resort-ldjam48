@@ -27,7 +27,6 @@ namespace Ship
                 _travelledDistance += _speed * Time.deltaTime;
                 if (_travelledDistance >= Distance)
                 {
-                    Debug.Log("Platsch!");
                     Destroy(gameObject);
                 }
             }
@@ -38,7 +37,6 @@ namespace Ship
             var otherShipControl = ShipControl.FindShipControlInParents(other.gameObject);
             if (otherShipControl != null && otherShipControl != OriginShip)
             {
-                Debug.Log($"Hit ship {otherShipControl.gameObject.name}");
                 Destroy(gameObject);
                 otherShipControl.ChangeHullHealth(-Damage);
                 otherShipControl.ChangeCrewHealth(-CrewDamage);
