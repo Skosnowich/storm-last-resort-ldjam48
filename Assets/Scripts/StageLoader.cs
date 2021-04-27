@@ -31,6 +31,15 @@ public class StageLoader : MonoBehaviour
 
     private void Update()
     {
+//        if (Input.GetKeyDown(KeyCode.H))
+//        {
+//            var enemyShips = GameObject.FindGameObjectsWithTag("EnemyShip");
+//            foreach (var enemyShip in enemyShips)
+//            {
+//                Destroy(enemyShip);
+//            }
+//        }
+        
         if (_playerShip != null && !_playerShip.Invincible)
         {
             if (_playerShip.CurrentCrewHealth() < 0.01F)

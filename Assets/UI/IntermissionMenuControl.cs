@@ -89,6 +89,76 @@ namespace UI
                         optionThreeEnabled: GlobalGameState.CurrentHullHealth < GlobalGameState.MaxHullHealth
                     );
                     break;
+                case Stage._8_Begin_o_storm:
+                    Refresh(
+                        "Set course",
+                        new[]
+                        {
+                            "\"And now change course again and head to the storm!\"",
+                            "Your crew seems to be a little bit uncomfortable, but as you speak some encouraging words, you strike the fear out of their eyes.",
+                            "Of course - \"Ships ahoy!\" it sounds from the crow's nest - this time it is a scout ship and a medium-sized ship.",
+                            "This shouldn't be a problem as well, but slowly you lose time..."
+                        },
+                        "Engage the enemies"
+                    );
+                    break;
+                case Stage._9_After_Begin_o_storm:
+                    GlobalGameState.Gold += 50;
+                    GlobalGameState.ChangeHullHealth(20);
+                    Refresh(
+                        "The Last Port",
+                        new[]
+                        {
+                            "You destroyed the enemy ships and found 50 gold doubloons - also your crew was able to salvage some material and to repair your ship a little bit (+20 hull health).",
+                            "One of your crew members tells you that he knows a port close by. You decide to approach it - of course you don't have time to rest there - but you might at least be able to restock.",
+                            "As you approach the port, the residents already seek shelter from the storm.",
+                            "This is probably the last port you can reach before you get into the storm."
+                        },
+                        // 100 to 150 + 30 + X
+                        "You decide to buy new cannons (+2 cannons / -100 gold)",
+                        "You decide to fortify your ship (+30 max hull health / -130 gold)",
+                        "You are lucky, you found some fellows who are willing to join your crew and repair your ship (-150 gold).",
+                        optionTwoEnabled: GlobalGameState.Gold >= 130,
+                        optionThreeEnabled: GlobalGameState.Gold >= 150
+                    );
+                    break;
+                case Stage._12_Fight_in_the_storm:
+                    Refresh(
+                        "The Confusion of the Storm",
+                        new[]
+                        {
+                            "You have to leave the port, because the enemy will surely close in.",
+                            "Setting the course into the direction of the storm, the rain gets heavier and heavier and thunderbolts roam in the skies.",
+                            "Suddenly - hidden from the chaos in the storm - you notice two medium ships, one to your left and one to your right!"
+                        },
+                        "Engage the enemies"
+                    );
+                    break;
+                case Stage._13_After_Fight_in_the_storm:
+                    GlobalGameState.ChangeHullHealth(20);
+                    Refresh(
+                        "Safety?",
+                        new[]
+                        {
+                            "Again you have beaten your enemies. From all the blinding flashes the sky is as bright as if it was day. Nonetheless you can't see much, all the rain and wind cloud your sight.",
+                            "You need to get out of the storm as soon as possible - your ship is already taking heavy damage from the wind and waves.",
+                            "Provisional repairs keep the ship together.",
+                            "And then - finally - you see lights at the horizon..."
+                        },
+                        "Continue"
+                    );
+                    break;
+                case Stage._16_Flee_in_the_storm:
+                    Refresh(
+                        "Not yet",
+                        new[]
+                        {
+                            "You can't believe what you see - ship's lanterns - the Great Royal Fleet is close behind you.",
+                            "You won't stand a chance in direct battle against those heavy warships. The only option is to flee."
+                        },
+                        "Engage the situation"
+                    );
+                    break;
                 case Stage._END_Won:
                     Refresh(
                         "Storm - The Last Resort",
@@ -213,7 +283,45 @@ namespace UI
                             break;
                     }
 
-                    UpdateToStage(Stage._END_Won);
+                    UpdateToStage(Stage._8_Begin_o_storm);
+                    break;
+                case Stage._8_Begin_o_storm:
+                    StartEncounter(Stage._8_Begin_o_storm);
+                    break;
+                case Stage._9_After_Begin_o_storm:
+                    switch (_optionChosen)
+                    {
+                        case 1:
+                            GlobalGameState.Gold -= 100;
+                            _result = "Your ship now has two shiny cannons more.";
+                            break;
+                        case 2:
+                            GlobalGameState.MaxHullHealth += 30;
+                            GlobalGameState.CurrentHullHealth += 30;
+                            GlobalGameState.Gold -= 130;
+
+                            _result = "Your ship now is bulkier - let the storm come.";
+                            break;
+                        case 3:
+                            GlobalGameState.Gold -= 150;
+                            GlobalGameState.ChangeHullHealth(400);
+                            GlobalGameState.MaxCrewHealth += 10;
+                            GlobalGameState.ChangeCrewHealth(400);
+
+                            _result = "You were really lucky. The fellows you found have many friends who want to leave that port. They completely repaired your ship.";
+                            break;
+                    }
+
+                    UpdateToStage(Stage._12_Fight_in_the_storm);
+                    break;
+                case Stage._12_Fight_in_the_storm:
+                    StartEncounter(Stage._12_Fight_in_the_storm);
+                    break;
+                case Stage._13_After_Fight_in_the_storm:
+                    UpdateToStage(Stage._16_Flee_in_the_storm);
+                    break;
+                case Stage._16_Flee_in_the_storm:
+                    StartEncounter(Stage._16_Flee_in_the_storm);
                     break;
                 case Stage._END_Won:
                     switch (_optionChosen)

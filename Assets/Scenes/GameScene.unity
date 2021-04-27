@@ -1075,8 +1075,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586ea4422b7604840a8086e20a2e9163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StageOverride: 1
-  StartStage: 4
+  StageOverride: 0
+  StartStage: 8
 --- !u!4 &501440911
 Transform:
   m_ObjectHideFlags: 0

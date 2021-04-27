@@ -11,5 +11,5 @@ public enum Stage
     _16_Flee_in_the_storm,
     _END_Won,
     _END_Won_ResultScreen,
-    _END_GameOver
+    _END_GameOver,
 }
