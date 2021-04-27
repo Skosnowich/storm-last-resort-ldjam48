@@ -31,7 +31,7 @@ public class GlobalGameState : MonoBehaviour
 
     public static void Initialize()
     {
-        _paused = false;
+        Unpause();
 
         MaxHullHealth = 100;
         MaxCrewHealth = 50;
