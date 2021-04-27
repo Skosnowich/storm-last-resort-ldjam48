@@ -597,6 +597,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship
       objectReference: {fileID: 0}
+    - target: {fileID: 3390780575917169999, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
+      propertyPath: Invincible
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5750246182314152655, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2462,6 +2466,10 @@ PrefabInstance:
       value: Ship
       objectReference: {fileID: 0}
     - target: {fileID: 3390780575917169999, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
+      propertyPath: Invincible
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3390780575917169999, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
       propertyPath: DamageOverTime
       value: 0.75
       objectReference: {fileID: 0}
@@ -3146,6 +3154,10 @@ PrefabInstance:
     - target: {fileID: 3390780575917169997, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
       propertyPath: m_Name
       value: Ship
+      objectReference: {fileID: 0}
+    - target: {fileID: 3390780575917169999, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
+      propertyPath: Invincible
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5750246182314152655, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
       propertyPath: m_Enabled
@@ -4901,6 +4913,10 @@ PrefabInstance:
     - target: {fileID: 3390780575917169997, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
       propertyPath: m_Name
       value: Ship
+      objectReference: {fileID: 0}
+    - target: {fileID: 3390780575917169999, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
+      propertyPath: Invincible
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5750246182314152655, guid: c62bb4c309dca9540ac779c1b4cb6133, type: 3}
       propertyPath: m_Enabled

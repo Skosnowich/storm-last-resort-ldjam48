@@ -293,6 +293,7 @@ namespace UI
                     {
                         case 1:
                             GlobalGameState.Gold -= 100;
+                            GlobalGameState.CannonCount += 2;
                             _result = "Your ship now has two shiny cannons more.";
                             break;
                         case 2:

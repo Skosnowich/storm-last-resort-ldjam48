@@ -16,15 +16,16 @@ public class BattleSceneLoader : MonoBehaviour
         var stageLoaders = FindObjectsOfType<StageLoader>(true);
         foreach (var stageLoader in stageLoaders)
         {
-            if (stageLoader.Stage == StartStage)
-            {
-                stageLoader.gameObject.SetActive(true);
-                var playerShipControl = GameObject.FindWithTag("PlayerShip").GetComponent<ShipControl>();
-                playerShipControl.UpdateFromGlobalGameState();
-            }
-            else
+            if (stageLoader.Stage != StartStage)
             {
                 Destroy(stageLoader.gameObject);
+            }
+        }
+        foreach (var stageLoader in stageLoaders)
+        {
+            if (stageLoader != null && stageLoader.Stage == StartStage)
+            {
+                stageLoader.gameObject.SetActive(true);
             }
         }
     }

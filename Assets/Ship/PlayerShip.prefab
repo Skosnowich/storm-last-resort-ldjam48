@@ -132,8 +132,8 @@ MonoBehaviour:
   RudderPositionMax: 20
   SteeringSpeed: 15
   RudderDeadZone: 2.5
-  MaxHullHealth: 100
-  MaxCrewHealth: 50
+  MaxHullHealth: 50
+  MaxCrewHealth: 25
   SpeedModifier: 1
   CollisionFrontAngle: 45
   MaxCollisionDamage: 15
@@ -142,6 +142,7 @@ MonoBehaviour:
   ShipLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  DamageOverTime: 0
   PlayerAudioMixerGroup: {fileID: 4243423455100174928, guid: ebe07cecc8155cc47bbb47c45a951329, type: 2}
   EnemyAudioMixerGroup: {fileID: 7872626921260546208, guid: ebe07cecc8155cc47bbb47c45a951329, type: 2}
   RudderAudioMixerGroup: {fileID: 1575495727531987440, guid: ebe07cecc8155cc47bbb47c45a951329, type: 2}

@@ -24,11 +24,6 @@ public class StageLoader : MonoBehaviour
 
     private float _missionTime;
 
-    private void Start()
-    {
-        _playerShip = GameObject.FindWithTag("PlayerShip").GetComponent<ShipControl>();
-    }
-
     private void Update()
     {
 //        if (Input.GetKeyDown(KeyCode.H))
@@ -39,6 +34,11 @@ public class StageLoader : MonoBehaviour
 //                Destroy(enemyShip);
 //            }
 //        }
+
+        if (_playerShip == null)
+        {
+            _playerShip = GameObject.FindWithTag("PlayerShip")?.GetComponent<ShipControl>();
+        }
 
         if (_playerShip != null && !_playerShip.Invincible)
         {
@@ -62,6 +62,7 @@ public class StageLoader : MonoBehaviour
                     if (!_initializedStage)
                     {
                         GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
+                        _playerShip.UpdateFromGlobalGameState();
                         _initializedStage = true;
                     }
                     else
@@ -75,6 +76,7 @@ public class StageLoader : MonoBehaviour
                     {
                         GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
                         GetSoundManager().PlaySound(NotSoHeavyRainAudio, RainAudioMixerGroup, loopingIdentifier: "rainAudio");
+                        _playerShip.UpdateFromGlobalGameState();
                         _initializedStage = true;
                     }
 
@@ -89,6 +91,7 @@ public class StageLoader : MonoBehaviour
                     {
                         GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
                         GetSoundManager().PlaySound(HeavyRainAudio, RainAudioMixerGroup, loopingIdentifier: "rainAudio");
+                        _playerShip.UpdateFromGlobalGameState();
                         _initializedStage = true;
                     }
 
@@ -103,6 +106,7 @@ public class StageLoader : MonoBehaviour
                     {
                         GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
                         GetSoundManager().PlaySound(HeavyRainAudio, RainAudioMixerGroup, loopingIdentifier: "rainAudio");
+                        _playerShip.UpdateFromGlobalGameState();
                         _initializedStage = true;
                         _missionTime = 0;
                     }

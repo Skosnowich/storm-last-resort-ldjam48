@@ -58,8 +58,11 @@ namespace Ship
             _rigidbody = GetComponent<Rigidbody2D>();
             _bars = GetComponent<Bars>();
 
-            _currentHullHealth = MaxHullHealth;
-            _currentCrewHealth = MaxCrewHealth;
+            if (Team == Team.Enemy)
+            {
+                _currentHullHealth = MaxHullHealth;
+                _currentCrewHealth = MaxCrewHealth;
+            }
 
             _soundManager = SoundManager.FindByTag();
         }
@@ -68,6 +71,9 @@ namespace Ship
         {
             if (GlobalGameState.IsUnpaused())
             {
+                _bars.HullBar.Value = _currentHullHealth / MaxHullHealth;
+                _bars.CrewBar.Value = _currentCrewHealth / MaxCrewHealth;
+                
                 _lastCrash = _lastCrash > 0 ? _lastCrash - Time.deltaTime : 0;
                 if (_currentVelocity < _sailsOpen)
                 {
@@ -248,18 +254,19 @@ namespace Ship
             MaxHullHealth = GlobalGameState.MaxHullHealth;
             _currentCrewHealth = GlobalGameState.CurrentCrewHealth;
             _currentHullHealth = GlobalGameState.CurrentHullHealth;
+            
             var firingArcControls = GetComponentsInChildren<FiringArcControl>();
             foreach (var firingArcControl in firingArcControls)
             {
                 firingArcControl.CannonBallCount = GlobalGameState.CannonCount;
                 firingArcControl.ReadyUpTime = GlobalGameState.ReadyUpTime;
             }
+
+            Invincible = false;
         }
 
         public void UpdateToGlobalGameState()
         {
-            GlobalGameState.MaxCrewHealth = Mathf.RoundToInt(MaxCrewHealth);
-            GlobalGameState.MaxHullHealth = Mathf.RoundToInt(MaxHullHealth);
             GlobalGameState.CurrentCrewHealth = Mathf.RoundToInt(_currentCrewHealth);
             GlobalGameState.CurrentHullHealth = Mathf.RoundToInt(_currentHullHealth);
         }
