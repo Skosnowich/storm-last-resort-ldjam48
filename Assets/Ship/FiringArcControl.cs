@@ -121,7 +121,7 @@ namespace Ship
                     cannonBall.Speed = direction.normalized * CannonBallSpeed;
                     cannonBall.OriginShip = _ownShipControl;
                     cannonBall.Damage = CannonBallDamage;
-                    cannonBall.CrewDamage = Random.Range(0, 1) <= CannonBallCrewDamageProbability ? CannonBallCrewDamage : 0;
+                    cannonBall.CrewDamage = Random.Range(0F, 1F) <= CannonBallCrewDamageProbability ? CannonBallCrewDamage : 0;
                 }
 
                 _remainingReadyUpTime += ReadyUpTime;

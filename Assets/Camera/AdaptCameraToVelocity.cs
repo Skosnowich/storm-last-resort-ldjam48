@@ -18,6 +18,7 @@ namespace Camera
         private void Start()
         {
             _camera = GetComponent<UnityEngine.Camera>();
+            ShipControl = GameObject.FindWithTag("PlayerShip").GetComponent<ShipControl>();
         }
 
         private void Update()

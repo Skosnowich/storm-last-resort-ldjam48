@@ -1,4 +1,6 @@
+using Audio;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 namespace Water
@@ -13,19 +15,25 @@ namespace Water
         public float RampUpTime;
         public float RampDownTime;
 
+        public AudioMixerGroup ThunderGroup;
+        public AudioClip SmallThunderAudio;
+        public AudioClip BigThunderAudio;
+        public float SmallThunderProbability;
+
         private float _nextFlashTime;
         private float _intensityAim;
         private float _rampUpRemaining;
         private float _rampDownRemaining;
+        private SoundManager _soundManager;
 
         private void Start()
         {
             _nextFlashTime = UpperRangeTime;
+            _soundManager = SoundManager.FindByTag();
         }
 
         private void Update()
         {
-            Debug.Log("_nextFlashTime: " + _nextFlashTime + " - _aim: "  + _intensityAim + " - upRemaining: " + _rampUpRemaining + " - downReamin: " + _rampDownRemaining );
             if (GlobalGameState.IsUnpaused())
             {
                 if (_nextFlashTime > 0)
@@ -38,6 +46,9 @@ namespace Water
                     _nextFlashTime = Random.Range(LowerRangeTime, UpperRangeTime);
                     _intensityAim = Random.Range(LowerRangeIntensity, UpperRangeIntensity);
                     _rampUpRemaining = RampUpTime - _rampUpRemaining;
+
+                    var audioClip = Random.Range(0F, 1F) < SmallThunderProbability ? SmallThunderAudio : BigThunderAudio;
+                    _soundManager.PlaySound(audioClip, ThunderGroup, pitchMin: 0.8F, pitchMax: 1.2F);
                 }
 
                 float currentIntensity = 0;

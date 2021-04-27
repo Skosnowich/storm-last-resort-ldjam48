@@ -1,10 +1,10 @@
 using System;
+using System.Linq;
 using Audio;
 using Ship;
 using UI;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 
 public class StageLoader : MonoBehaviour
 {
@@ -14,9 +14,15 @@ public class StageLoader : MonoBehaviour
 
     public AudioMixerGroup AmbienteAudioMixerGroup;
     public AudioClip CalmAmbienteAudio;
+
+    public AudioMixerGroup RainAudioMixerGroup;
+    public AudioClip HeavyRainAudio;
+    public AudioClip NotSoHeavyRainAudio;
     
     private SoundManager _soundManager;
     private bool _initializedStage;
+
+    private float _missionTime;
 
     private void Start()
     {
@@ -38,24 +44,75 @@ public class StageLoader : MonoBehaviour
                 Destroy(_playerShip.gameObject);
             }
         }
-        
-        switch (Stage)
+
+        if (!GameOverWindow.gameObject.activeSelf)
         {
-            case Stage._3_First_Encounter:
-                if (!_initializedStage)
-                {
-                    GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
-                    _initializedStage = true;
-                }
-                
-                var enemyShips = GameObject.FindGameObjectsWithTag("EnemyShip");
-                if (enemyShips.Length <= 0)
-                {
-                    Win(Stage._4_Scout_Sunk);
-                }
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            switch (Stage)
+            {
+                case Stage._3_First_Encounter:
+                    if (!_initializedStage)
+                    {
+                        GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
+                        _initializedStage = true;
+                    }
+
+                    WinWhenAllEnemiesAreDead(Stage._4_Scout_Sunk);
+                    break;
+                case Stage._8_Begin_o_storm:
+                    if (!_initializedStage)
+                    {
+                        GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
+                        GetSoundManager().PlaySound(NotSoHeavyRainAudio, RainAudioMixerGroup, loopingIdentifier: "rainAudio");
+                        _initializedStage = true;
+                    }
+
+                    WinWhenAllEnemiesAreDead(Stage._9_After_Begin_o_storm);
+                    break;
+                case Stage._12_Fight_in_the_storm:
+                    if (!_initializedStage)
+                    {
+                        GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
+                        GetSoundManager().PlaySound(HeavyRainAudio, RainAudioMixerGroup, loopingIdentifier: "rainAudio");
+                        _initializedStage = true;
+                    }
+
+                    WinWhenAllEnemiesAreDead(Stage._13_After_Fight_in_the_storm);
+                    break;
+                case Stage._16_Flee_in_the_storm:
+                    if (!_initializedStage)
+                    {
+                        GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
+                        GetSoundManager().PlaySound(HeavyRainAudio, RainAudioMixerGroup, loopingIdentifier: "rainAudio");
+                        _initializedStage = true;
+                        _missionTime = 0;
+                    }
+
+                    _missionTime += Time.deltaTime;
+
+                    if (_missionTime > 60)
+                    {
+                        
+                        var enemyShips = GameObject.FindGameObjectsWithTag("EnemyShip");
+                        foreach (var enemyShip in enemyShips)
+                        {
+                            Destroy(enemyShip);
+                        }
+                    }
+
+                    WinWhenAllEnemiesAreDead(Stage._END_Won);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
+    private void WinWhenAllEnemiesAreDead(Stage nextStage)
+    {
+        var enemyShips = GameObject.FindGameObjectsWithTag("EnemyShip");
+        if (enemyShips.Length <= 0 || enemyShips.All(enemyShip => enemyShip.GetComponent<ShipControl>().CurrentCrewHealth() < 0.01F))
+        {
+            Win(nextStage);
         }
     }
 
@@ -79,6 +136,8 @@ public class StageLoader : MonoBehaviour
 
     private void Win(Stage nextStage)
     {
+        _playerShip.DamageOverTime = 0;
+        _playerShip.Invincible = true;
         GameOverWindow.GameOverText = "No more enemies in sight!";
         GameOverWindow.gameObject.SetActive(true);
         _playerShip.GetComponent<ShipControl>().UpdateToGlobalGameState();

@@ -21,7 +21,10 @@ public class BattleSceneLoader : MonoBehaviour
                 stageLoader.gameObject.SetActive(true);
                 var playerShipControl = GameObject.FindWithTag("PlayerShip").GetComponent<ShipControl>();
                 playerShipControl.UpdateFromGlobalGameState();
-                return;
+            }
+            else
+            {
+                Destroy(stageLoader.gameObject);
             }
         }
     }

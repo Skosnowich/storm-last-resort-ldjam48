@@ -27,6 +27,7 @@ namespace Ship
         public float MinSpeedForCollisionDamage = 0.5F;
         public float HullHealthSpeedReductionDeadZone = .2F;
         public LayerMask ShipLayerMask;
+        public float DamageOverTime = 0;
        
 
         public AudioMixerGroup PlayerAudioMixerGroup;
@@ -88,6 +89,11 @@ namespace Ship
                 else
                 {
                     _rigidbody.angularVelocity = 0;
+                }
+
+                if (DamageOverTime >= 0.01F)
+                {
+                    ChangeHullHealth(-DamageOverTime * Time.deltaTime);
                 }
             }
         }
