@@ -27,17 +27,20 @@ namespace Enemy
         private void FireIfPossible(FiringArcControl firingArc)
         {
             var shipsInRange = firingArc.GetShipsInRange();
-            foreach (var shipControl in shipsInRange)
+            if (shipsInRange != null)
             {
-                if (shipControl != null)
+                foreach (var shipControl in shipsInRange)
                 {
-                    var currentVelocity = shipControl.GetCurrentVelocity();
-                    var shipControlTransform = shipControl.transform;
-                    var distance = (shipControlTransform.position - _shipControl.transform.position).magnitude;
-                    var travelTime = distance / firingArc.CannonBallSpeed;
-                    var targetPosition = (Vector2) shipControlTransform.position + (Vector2) shipControlTransform.up * currentVelocity * travelTime;
-                    firingArc.Fire(targetPosition);
-                    return;
+                    if (shipControl != null)
+                    {
+                        var currentVelocity = shipControl.GetCurrentVelocity();
+                        var shipControlTransform = shipControl.transform;
+                        var distance = (shipControlTransform.position - _shipControl.transform.position).magnitude;
+                        var travelTime = distance / firingArc.CannonBallSpeed;
+                        var targetPosition = (Vector2) shipControlTransform.position + (Vector2) shipControlTransform.up * currentVelocity * travelTime;
+                        firingArc.Fire(targetPosition);
+                        return;
+                    }
                 }
             }
         }

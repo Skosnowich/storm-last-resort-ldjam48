@@ -18,7 +18,7 @@ public class StageLoader : MonoBehaviour
     public AudioMixerGroup RainAudioMixerGroup;
     public AudioClip HeavyRainAudio;
     public AudioClip NotSoHeavyRainAudio;
-    
+
     private SoundManager _soundManager;
     private bool _initializedStage;
 
@@ -39,7 +39,7 @@ public class StageLoader : MonoBehaviour
 //                Destroy(enemyShip);
 //            }
 //        }
-        
+
         if (_playerShip != null && !_playerShip.Invincible)
         {
             if (_playerShip.CurrentCrewHealth() < 0.01F)
@@ -64,8 +64,11 @@ public class StageLoader : MonoBehaviour
                         GetSoundManager().PlaySound(CalmAmbienteAudio, AmbienteAudioMixerGroup, loopingIdentifier: "ambienteAudio");
                         _initializedStage = true;
                     }
+                    else
+                    {
+                        WinWhenAllEnemiesAreDead(Stage._4_Scout_Sunk);
+                    }
 
-                    WinWhenAllEnemiesAreDead(Stage._4_Scout_Sunk);
                     break;
                 case Stage._8_Begin_o_storm:
                     if (!_initializedStage)
@@ -75,7 +78,11 @@ public class StageLoader : MonoBehaviour
                         _initializedStage = true;
                     }
 
-                    WinWhenAllEnemiesAreDead(Stage._9_After_Begin_o_storm);
+                    else
+                    {
+                        WinWhenAllEnemiesAreDead(Stage._9_After_Begin_o_storm);
+                    }
+
                     break;
                 case Stage._12_Fight_in_the_storm:
                     if (!_initializedStage)
@@ -85,7 +92,11 @@ public class StageLoader : MonoBehaviour
                         _initializedStage = true;
                     }
 
-                    WinWhenAllEnemiesAreDead(Stage._13_After_Fight_in_the_storm);
+                    else
+                    {
+                        WinWhenAllEnemiesAreDead(Stage._13_After_Fight_in_the_storm);
+                    }
+
                     break;
                 case Stage._16_Flee_in_the_storm:
                     if (!_initializedStage)
@@ -95,20 +106,22 @@ public class StageLoader : MonoBehaviour
                         _initializedStage = true;
                         _missionTime = 0;
                     }
-
-                    _missionTime += Time.deltaTime;
-
-                    if (_missionTime > 60)
+                    else
                     {
-                        
-                        var enemyShips = GameObject.FindGameObjectsWithTag("EnemyShip");
-                        foreach (var enemyShip in enemyShips)
+                        _missionTime += Time.deltaTime;
+
+                        if (_missionTime > 60)
                         {
-                            Destroy(enemyShip);
+                            var enemyShips = GameObject.FindGameObjectsWithTag("EnemyShip");
+                            foreach (var enemyShip in enemyShips)
+                            {
+                                Destroy(enemyShip);
+                            }
                         }
+
+                        WinWhenAllEnemiesAreDead(Stage._END_Won);
                     }
 
-                    WinWhenAllEnemiesAreDead(Stage._END_Won);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

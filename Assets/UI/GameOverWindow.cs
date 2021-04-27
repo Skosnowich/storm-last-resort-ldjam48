@@ -16,6 +16,7 @@ namespace UI
 
         public void PressedContinue()
         {
+            GameObject.FindWithTag("MainCamera").GetComponent<AudioListener>().enabled = false;
             SceneManager.LoadScene("InterMission");
         }
     }
